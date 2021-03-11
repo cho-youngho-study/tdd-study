@@ -43,4 +43,16 @@ router.get('/users/:id', (req, res) => {
   }
 })
 
+router.delete('/users/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const user = users.filter((user) => {
+    return user.id !== id
+  })[0];
+  if (Number.isNaN(id)) {
+    res.status(400).end();
+  } else {
+    res.status(204).end();
+  }
+})
+
 module.exports = router;
