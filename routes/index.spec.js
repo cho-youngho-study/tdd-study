@@ -33,3 +33,32 @@ describe('GET /users', () => {
     });
 
 })
+
+describe('GET /users/:id', () => {
+    describe('성공시', () => {
+        it('id가 1인 유저 객체를 반환', (done) => {
+            supertest(index)
+                .get('/users/1')
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('id', 1);
+                    done();
+                })
+        })
+    });
+    describe('실패시', () => {
+        it('id가 숫자가 아닐경우 400 응답', (done) => {
+            supertest(index)
+                .get('/users/one')
+                .expect(400)
+                .end(done)
+        });
+        it('id로 유저를 찾을 수 없을 경우 404 응답', (done) => {
+            supertest(index)
+                .get('/users/4')
+                .expect(404)
+                .end(done)
+        })
+    })
+
+});
