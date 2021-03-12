@@ -81,3 +81,47 @@ describe('DELETE /users/:id', () => {
         })
     })
 })
+
+describe('POST /users', () => {
+    describe('성공시', () => {
+        let name = 'onetwo',
+            body;
+        before(done => {
+            supertest(index)
+                .post('/users')
+                .send({
+                    name
+                })
+                .expect(201)
+                .end((err, res) => {
+                    if (err) throw err;
+                    body = res.body;
+                    done();
+                })
+        })
+        it('생성된 유저 객체 반환', () => {
+            body.should.have.property('id');
+        });
+        it('입력한 name 반환', () => {
+            body.should.have.property('name', name);
+        });
+    });
+    describe('실패시', () => {
+        it('name 누락시 400 반환', done => {
+            supertest(index)
+                .post('/users')
+                .send({})
+                .expect(400)
+                .end(done)
+        });
+        it('name 중복일 때 409 반환', done => {
+            supertest(index)
+                .post('/users')
+                .send({
+                    name: 'hello'
+                })
+                .expect(409)
+                .end(done)
+        })
+    })
+})

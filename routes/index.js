@@ -55,4 +55,26 @@ router.delete('/users/:id', (req, res) => {
   }
 })
 
+router.post('/users', (req, res) => {
+  const name = req.body.name;
+  const nameConfirm = users.filter(user => {
+    return user.name === name
+  }).length
+
+  if (!name) {
+    return res.status(400).end();
+  }
+  if (nameConfirm) {
+    return res.status(409).end();
+  }
+
+  const id = Date.now();
+  const user = {
+    id,
+    name
+  };
+  users.push(user);
+  res.status(201).json(user);
+})
+
 module.exports = router;
