@@ -77,4 +77,31 @@ router.post('/users', (req, res) => {
   res.status(201).json(user);
 })
 
+router.put('/users/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const name = req.body.name;
+
+  if (Number.isNaN(id)) {
+    return res.status(400).end();
+  }
+  if (!name) {
+    return res.status(400).end();
+  }
+
+  const userConfirm = users.filter(user => user.name === name).length;
+  if (userConfirm) {
+    return res.status(409).end();
+  }
+
+
+  const changeUser = users.filter(user => {
+    return user.id === id
+  })[0];
+  if (!changeUser) {
+    return res.status(404).end();
+  }
+  changeUser.name = name;
+  res.json(changeUser);
+})
+
 module.exports = router;

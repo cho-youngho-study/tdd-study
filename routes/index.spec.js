@@ -125,3 +125,53 @@ describe('POST /users', () => {
         })
     })
 })
+
+describe('PUT /users/:id', () => {
+    describe('성공시', () => {
+        it('변경된 name 응답', done => {
+            supertest(index)
+                .put('/users/3')
+                .send({
+                    name: 'mm'
+                })
+                .end((err, res) => {
+                    if (err) throw err;
+                    res.body.should.have.property('name');
+                    done();
+                })
+        })
+    });
+    describe('실패시', () => {
+        it('정수가 아닌 id일 경우 400 응답', done => {
+            supertest(index)
+                .put('/users/one')
+                .expect(400)
+                .end(done)
+        })
+        it('name이 없을 경우 400 응답', done => {
+            supertest(index)
+                .put('/users/5')
+                .expect(400)
+                .send({})
+                .end(done)
+        })
+        it('없는 유저일 경우 404 응답', done => {
+            supertest(index)
+                .put('/users/5')
+                .expect(404)
+                .send({
+                    name: 'ddd'
+                })
+                .end(done)
+        })
+        it('이름이 중복일 경우 409 응답', done => {
+            supertest(index)
+                .put('/users/1')
+                .expect(409)
+                .send({
+                    name: 'hello'
+                })
+                .end(done)
+        })
+    })
+})
