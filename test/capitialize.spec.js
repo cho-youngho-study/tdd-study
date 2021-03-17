@@ -1,4 +1,4 @@
-let utils = require('./capitialize');
+let utils = require('../capitialize');
 const should = require('should');
 
 // 테스트 수트(테스트 환경 만들기)
