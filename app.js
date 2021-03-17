@@ -3,16 +3,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const dotenv = require('dotenv');
-
-dotenv.config();
+const configs = require('./configs');
 
 var indexRouter = require('./routes/users');
 
+dotenv.config();
 var app = express();
 
-if (process.env.NODE_ENV !== 'test') {
+if (configs.test !== 'test') {
     app.use(logger('dev'));
 }
+
 app.use(express.json());
 app.use(express.urlencoded({
     extended: false
